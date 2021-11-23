@@ -1,0 +1,19 @@
+{
+  "name": "readycheck",
+  "version": "0.2.0",
+  "description": "Standalone Always-On Readycheck",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Johannes Kanavin",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^11.8.2",
+    "node-cron": "^3.0.0",
+    "prom-client": "^14.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.4.3"
+  }
+}

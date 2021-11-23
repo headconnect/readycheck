@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readycheck
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: readycheck
+  template:
+    metadata:
+# Annotating on pod to get multiple results back to average
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "9090"
+      labels:
+        app: readycheck
+    spec:
+      volumes:
+        - name: targets
+          configMap:
+            name: readycheck
+            defaultMode: 420
+      dnsConfig:
+        options:
+          - name: ndots
+            value: '2'
+      containers:
+      - name: readycheck
+        image: <replace_with_your_image>
+        imagePullPolicy: Always
+        env:
+          - name: SOURCE_REGION
+            value: "cluster-region"
+          - name: CRON_SCHEDULE
+            value: "*/15 * * * * *"
+        resources:
+          requests:
+            memory: "42Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        volumeMounts:
+          - mountPath: /readycheck/destination
+            name: targets
+        ports:
+        - containerPort: 9090
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: readycheck
+# Disabled service annotations to scrape from each individual pod for aggregation/averaging/max-min'ing
+#  annotations:
+#    prometheus.io/scrape: "true"
+#    prometheus.io/path: "/metrics"
+#    prometheus.io/port: "9090"
+spec:
+  selector:
+    app: readycheck
+  ports:
+  - port: 9090
+    targetPort: 9090
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: readycheck
+data:
+  targets.json: |
+    [{
+        "Customer": "Generic",
+        "Deployment": "Google",
+        "Mode": "prod",
+        "Region": "global",
+        "URL": "https://google.com"
+    },{
+        "Customer": "Microsoft",
+        "Deployment": "AzurePortal",
+        "Mode": "prod",
+        "Region": "global",
+        "URL": "https://portal.azure.com"
+    }]
+
+
