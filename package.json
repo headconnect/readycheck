@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Johannes Kanavin",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "got": "^11.8.2",
     "node-cron": "^3.0.0",
