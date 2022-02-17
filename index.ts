@@ -137,7 +137,7 @@ cron.schedule(cronSchedule, async () => {
             }
         } 
         try {
-            targetHit = await got.get(target.URL,{timeout: {request: 9000}, http2: true})
+            targetHit = await got.get(target.URL,{timeout: {request: 9000}, http2: true, retry: {limit: 0}})
         } catch (e) {
             //console.log(e)
             console.error(`issue retrieving ${target.URL}`)
