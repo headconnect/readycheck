@@ -9,7 +9,8 @@
   "author": "Johannes Kanavin",
   "license": "MIT",
   "dependencies": {
-    "got": "^11.8.2",
+    "@types/node": "^20.1.1",
+    "got": "^12.5.3",
     "node-cron": "^3.0.0",
     "prom-client": "^14.0.0"
   },
